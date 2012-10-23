@@ -36,3 +36,10 @@
       (is (= (dice-coefficient set1 set4) 0.0))
       (is (= (dice-coefficient set1 set5) 0.0))
       (is (= (dice-coefficient set2 set3) (/ 2.0 3.0))))))
+
+(deftest generate-token-sequences
+  (testing "Generate Token Sequences"
+    (is (= (generate-token-sequences '("ab" "cd" "hij") 2 true)
+           '("ab cd" "cd hij" "hij")))
+    (is (= (generate-token-sequences '("ab" "cd" "hij") 2 false)
+           '("ab cd" "hij")))))
