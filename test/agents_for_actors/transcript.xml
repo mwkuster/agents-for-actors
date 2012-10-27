@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+	<title>Transcript of The Black Adder, Episode I "The Foretelling"</title>
+	<author>Richard Curtis</author>
+	<author>Rowan Atkinson</author>
+      </titleStmt>
+      <publicationStmt>
+	<p>Prepared by Marc Wilhelm Küster to demonstrate TextGrid and films</p>
+	<p>Timeline constructed against the audiorecording of "The Black Adder: The Foretelling"</p>
+        <p>For this test, the real content has been removed to avoid possible copyright pitfalls</p>
+      </publicationStmt>
+      <sourceDesc>
+	<bibl>Transcript based on audiorecording</bibl>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <front>
+      <castList>
+	<castItem>
+	  <role>Richard III</role>
+	  <actor>PC</actor>
+	</castItem>
+	<castItem>
+	  <role>Richard, Duke of York, later Richard IV</role>
+	  <actor>BB</actor>
+	</castItem>
+	<castItem>
+	  <role>Henry VII</role>
+	  <actor>PB</actor>
+	</castItem>
+	<castItem>
+	  <role>Harry, Prince of Wales</role>
+	  <actor>RD</actor>
+	</castItem>
+	<castItem>
+	  <role>Edmund, Duke of Edinburgh</role>
+	  <actor>RA</actor>
+	</castItem>
+	<castItem>
+	  <role>Percy, Duke of Northumberland</role>
+	  <actor>RMIy</actor>
+	</castItem>
+	<castItem>
+	  <role>The Queen</role>
+	  <actor>EG</actor>
+	</castItem>
+	<castItem>
+	  <role>The Painter</role>
+	  <actor>PK</actor>
+	</castItem>
+	<castItem>
+	  <role>Goneril</role>
+	  <actor>KSJ</actor>
+	</castItem>
+	<castItem>
+	  <role>Regan</role>
+	  <actor>BM</actor>
+	</castItem>
+	<castItem>
+	  <role>Cordelia</role>
+	  <actor>GF</actor>
+	</castItem>
+	<castItem>
+	  <role>Baldrick</role>
+	  <actor>TR</actor>
+	</castItem>
+      </castList>
+    </front>
+    <body>
+      <sp synch="#W1_57">
+	<speaker>Richard, Duke of York</speaker>
+	<p>Silence!...</p>
+      </sp>
+      <sp synch="#W2_05">
+	<speaker>Richard III</speaker>
+	<l>Now...</l>
+	<l>xxxx </l>
+	<l>xxxx <stage>cheers</stage></l>
+	<l>xxxxx,<stage>cheers</stage></l>
+	<l>xxxx.</l>
+	<l>I pray to Heaven we fare well,</l>
+	<l>xxxxx.<stage>cheers from everyone</stage></l>
+      </sp>
+      <sp synch="#W2_41">
+	<speaker>Edmund, Duke of Edinburgh</speaker>
+	<p>xxxx</p>
+      </sp>
+      <sp synch="#W2_45">
+	<speaker>Richard III</speaker> <stage>addressing Richard, Duke of York</stage>
+	<p>xxxx</p>
+      </sp>
+      <sp synch="#W2_48">
+	<speaker>Richard, Duke of York</speaker> 
+	<p>xxxx.</p>
+	<p>xxxx?</p>
+      </sp>
+      <sp synch="#W2_51">
+	<speaker>Harry, Prince of Wales</speaker>
+	<p>xxxxx.</p>
+      </sp>
+      <sp synch="#W2_55">
+	<speaker>Richard, Duke of York</speaker> 
+	<p>xxxx.</p>
+      </sp>
+      <sp synch="#W2_57">
+	<speaker>Richard III</speaker>
+	<p>xxxx?</p>
+	<stage>Noise</stage>
+      </sp>
+      <sp synch="#W2_59">
+	<speaker>Richard, Duke of York</speaker>
+	<p>xxxx?</p>
+      </sp>
+      <sp synch="#W3_03">
+	<speaker>Harry, Prince of Wales</speaker>
+	<p>xxxx</p>
+      </sp>
+      <sp synch="#W3_05">
+	<speaker>Richard, Duke of York</speaker>
+	<p>xxxxx?</p>
+      </sp>
+      <sp synch="#W3_11">
+	<speaker>Edmund</speaker>
+	<p>xxxxx</p>
+      </sp>
+      <stage>Giggling</stage>
+      <sp synch="#W3_23">
+	<speaker>Richard III</speaker>
+	<p>xxxxx?</p>
+      </sp>
+      <sp synch="#W3_27">
+	<speaker>Richard, Duke of York</speaker>
+	<p>xxxxx</p>
+      </sp>
+      <sp synch="#W3_29">
+	<speaker>Richard III</speaker>
+	<p>xxxxxx</p>
+      </sp>
+      <sp synch="#W3_31">
+	<speaker>Richard, Duke of York</speaker>
+	<p>xxxxx</p>
+      </sp>
+      <sp synch="#W3_32">
+	<speaker>Richard III</speaker>
+	<p>xxxxxxx</p>
+      </sp>
+
+      <timeline xml:id="T3_23" unit="min">
+	<when absolute="00:01:57" xml:id="W1_57"/>
+	<when absolute="00:02:05" xml:id="W2_05"/>
+	<when absolute="00:02:41" xml:id="W2_41"/>
+	<when absolute="00:02:45" xml:id="W2_45"/>
+	<when absolute="00:02:48" xml:id="W2_48"/>
+	<when absolute="00:02:51" xml:id="W2_51"/>
+	<when absolute="00:02:55" xml:id="W2_55"/>
+	<when absolute="00:02:57" xml:id="W2_57"/>
+	<when absolute="00:02:59" xml:id="W2_59"/>
+	<when absolute="00:03:03" xml:id="W3_03"/>
+	<when absolute="00:03:05" xml:id="W3_05"/>
+	<when absolute="00:03:11" xml:id="W3_11"/>
+	<when absolute="00:03:23" xml:id="W3_23"/>
+	<when absolute="00:03:28" xml:id="W3_28"/>
+	<when absolute="00:03:29" xml:id="W3_29"/>
+	<when absolute="00:03:31" xml:id="W3_31"/>
+	<when absolute="00:03:32" xml:id="W3_32"/>
+      </timeline>
+    </body>
+  </text>
+</TEI>
