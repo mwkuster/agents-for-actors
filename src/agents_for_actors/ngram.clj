@@ -24,12 +24,16 @@
     (* 2.0 (/ (count (set/intersection set1 set2)) (+ (count set1) (count set2))))))
 
 (defn generate-token-sequences 
-  "Take a list of tokens and build a string out of it that is
-word_count words long. Permutate causes the input to be created
-word_count times, each time with a different offset"
+  "Take a list of tokens and build a string out of it that is up to
+word_count words long. If permutate? is false, the last entry may
+contain fewer than word-count elements. Permutate causes the input to
+be created word_count times, each time with a different offset, but
+all having word-count elements (cf. tests)"
   ([token-seq word-count permutate?]
      (let
-         [step (if permutate? 1 word-count)] 
-       (map #(cs/join " " %) (partition-all word-count step token-seq))))
+         [seq (if (string? token-seq) (filter #(not (empty? %)) (cs/split token-seq #"[,;\.\s]")) token-seq)
+          step (if permutate? 1 word-count)
+          partition-fn (if permutate? partition partition-all)] 
+       (map #(cs/join " " %) (partition-fn word-count step seq))))
   ([token-seq word-count]
      (generate-token-sequences token-seq word-count false)))

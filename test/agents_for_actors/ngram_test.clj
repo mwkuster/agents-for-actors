@@ -40,6 +40,14 @@
 (deftest generate-token-sequences-test
   (testing "Generate Token Sequences"
     (is (= (generate-token-sequences '("ab" "cd" "hij") 2 true)
-           '("ab cd" "cd hij" "hij")))
+           '("ab cd" "cd hij")))
     (is (= (generate-token-sequences '("ab" "cd" "hij") 2 false)
-           '("ab cd" "hij")))))
+           '("ab cd" "hij")))
+    (is (= (generate-token-sequences "Silence, Silence for the King" 5)
+           '("Silence Silence for the King")))
+    (is (= (generate-token-sequences "Silence, Silence for the King" 3)
+           '("Silence Silence for" "the King")))
+    (is (= (generate-token-sequences "Silence, Silence for the King" 3 true)
+           '("Silence Silence for" "Silence for the" "for the King")))
+    (is (= (generate-token-sequences "Silence, Silence for the King" 100)
+           '("Silence Silence for the King")))))
