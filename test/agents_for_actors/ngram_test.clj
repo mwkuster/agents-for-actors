@@ -37,7 +37,7 @@
       (is (= (dice-coefficient set1 set5) 0.0))
       (is (= (dice-coefficient set2 set3) (/ 2.0 3.0))))))
 
-(deftest generate-token-sequences
+(deftest generate-token-sequences-test
   (testing "Generate Token Sequences"
     (is (= (generate-token-sequences '("ab" "cd" "hij") 2 true)
            '("ab cd" "cd hij" "hij")))
