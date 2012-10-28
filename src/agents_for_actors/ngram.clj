@@ -37,3 +37,23 @@ all having word-count elements (cf. tests)"
        (map #(cs/join " " %) (partition-fn word-count step seq))))
   ([token-seq word-count]
      (generate-token-sequences token-seq word-count false)))
+
+
+(defn ngram-similarity ^Double [^Integer chunk-size ^Integer ngram-count ^String phrase1 ^String phrase2]
+  "This specific definition of similarity builds on ngram and
+calculates the confidence for the similairty of two phrases, using
+ngram-count grams based on phrases chunk-size long. All permutations
+are compared"
+  ;(println "similar-phrase? called" phrase1 phrase2)
+  (let
+      [tok-seq1 (generate-token-sequences phrase1 chunk-size true)
+       tok-seq2 (generate-token-sequences phrase2 chunk-size true)]
+    (if  (not-any? empty? [phrase1 phrase2 tok-seq1 tok-seq2])
+      (apply max 
+             (map
+              (fn [[t1 t2]]
+                (dice-coefficient 
+                 (ngrams ngram-count t1)
+                 (ngrams ngram-count t2)))
+              (for [tok1 tok-seq1 tok2 tok-seq2] [tok1 tok2])))
+      0.0)))
