@@ -21,6 +21,10 @@
                                  {:position 1 :tag :body}
                                  {:position 1 :tag :text}
                                  {:position 1 :tag :TEI}]))
+    (is
+     (= (xpointer-tostr (nth locs 6)) "xpointer(/TEI[1]/text[1]/body[1]/sp[2]/l[6]/text()[1])"))
+(is
+     (= (loc-tostr (nth locs 6)) "<location src='xpointer(/TEI[1]/text[1]/body[1]/sp[2]/l[6]/text()[1])'>I pray to Heaven we fare well,</location>"))
     )))
 
         

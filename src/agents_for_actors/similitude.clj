@@ -3,10 +3,14 @@
             [clojure.zip :as z]
             [agents-for-actors.ngram :as ngram]))
 
-(defn find-similarities [phrase source similar?]
-  "Find similarities for a given phrase (= a location) in a source (= a sequence of locations) and return them. Use a given predicate (e.g. quadgram coupled with a dice coefficient with cutoff) for comparision"
+(defn find-similarities [phrase-loc source-seq similar?]
+  "Find similarities for a given phrase (= a location) in a source (=
+a sequence of locations) and return a sequence of maps of source and
+phrase locations pointing to those similarities. Use a given
+predicate (e.g. quadgram coupled with a dice coefficient with cutoff)
+for comparision"
   (let
-      [res (for [p source :when (similar? (z/node p) (z/node phrase))] {:phrase phrase :source p})]
+      [res (for [p-loc source-seq :when (similar? (z/node p-loc) (z/node phrase-loc))] {:phrase phrase-loc :source p-loc})]
     (filter #(not (empty? %)) res)))
       
 

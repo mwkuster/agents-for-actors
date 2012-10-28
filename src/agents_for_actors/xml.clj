@@ -1,17 +1,8 @@
 (ns agents-for-actors.xml
   (:require [clojure.xml :as xml]
             [clojure.zip :as z]
+            [clojure.string :as s]
             [clojure.set :as set]))
-
-(defn xml-ancestors 
-  "Return the tag symbols for the xml-ancestors of the current node-location"
-  ([node-loc]
-     (xml-ancestors node-loc []))
-  ([node-loc ancestor-seq]
-     (if (nil? node-loc)
-       ancestor-seq
-       (recur (z/up node-loc) 
-              (conj ancestor-seq (:tag (z/node node-loc)))))))
 
 (defn xpointer
   "Find the xpointer corresponding to this node-location. Returns a
@@ -25,15 +16,35 @@ representation of an XPointer"
        (recur (z/up node-loc) 
               (conj ancestor-seq 
                     (let
-                        [tag (:tag (z/node node-loc))
+                        [tag (:tag (z/node node-loc)),
                          same-tag? 
                          (fn [tst-tag] 
                            (= (:tag tst-tag) tag))]
                       {:position 
+                       ;Caution: z/lefts returns a list of nodes, not a list of locations!
                        (+ 1 (count (filter same-tag? (z/lefts node-loc)))) 
                        :tag tag})
                     )))))
 
+(defn xpointer-tostr [node-loc]
+  "Return a string version of an XPointer in compliance with the W3C XPointer recommendation"
+  (let
+      [xpath (s/join "/" (map  #(if (nil? (:tag %))
+                                  (str "text()[" (:position %) "]")
+                                  (str (subs (str (:tag %)) 1) "[" (:position %) "]"))
+                     (reverse (xpointer node-loc))))]
+    (str "xpointer(/" xpath ")")))
+
+(defn xml-ancestors 
+  "Return the tag symbols for the xml-ancestors of the current node-location"
+  [node-loc]
+  (let
+      [xptr (xpointer node-loc)]
+    (map :tag xptr)))
+
+(defn loc-tostr [node-loc]
+  "Output a location node as XML fragment"
+  (str "<location src='" (xpointer-tostr node-loc) "'>" (z/node node-loc) "</location>"))
 
 (defn extract-text-nodes [xml-zipper filter-tags]
  "Do a depth-first traversal of the zipper, representing an XML tree
