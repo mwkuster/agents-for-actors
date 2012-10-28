@@ -30,12 +30,8 @@
               transcript-filtered)
            :when (not (empty? s)) ;explicitly exclude those runs that returned nil
            ]
-       (do
-         ;(println s)
-         (try 
-           (println "<result confidence='" (:confidence s) "'><phrase>" (x/loc-tostr (:phrase s)) "</phrase><source>" (x/loc-tostr (:source s)) "</source></result>")
-           (catch Exception e (println "EXCEPTION" (s/join s))))
-         )))
+       (println "<result confidence='" (:confidence s) "'><phrase>" (x/loc-tostr (:phrase s)) "</phrase><source>" (x/loc-tostr (:source s)) "</source></result>")
+       ))
     (println "</results>")))
     
 
