@@ -18,7 +18,7 @@
     (println "<chunk-size>" chunk-size "</chunk-size>")
     (println "<ngram-count>" ngram-count "</ngram-count>")
     (println "<source-file>" source-file "</source-file>")
-    (println "<target-file>" source-file "</target-file>")
+    (println "<target-file>" target-file "</target-file>")
     (doall 
      (for [s (flatten ;Caution: map alone would build a list of lists
               (pmap 
