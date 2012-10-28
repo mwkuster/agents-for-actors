@@ -14,7 +14,7 @@ comparision"
                  :let [confidence (similarity-fn (z/node p-loc) (z/node phrase-loc))]
                  :when (> confidence min-confidence)]
              (do
-               (println confidence)
+               ;(println confidence)
                {:phrase phrase-loc :source p-loc :confidence confidence}))]
        (filter #(not (empty? %)) res)))
       
