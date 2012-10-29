@@ -23,7 +23,7 @@
        set2 (set seq2)]
     (* 2.0 (/ (count (set/intersection set1 set2)) (+ (count set1) (count set2))))))
 
-(defn generate-token-sequences 
+(defn generate-chunk-sequences 
   "Take a list of tokens and build a string out of it that is up to
 word_count words long. If permutate? is false, the last entry may
 contain fewer than word-count elements. Permutate causes the input to
@@ -36,7 +36,7 @@ all having word-count elements (cf. tests)"
           partition-fn (if permutate? partition partition-all)] 
        (map #(cs/join " " %) (partition-fn word-count step seq))))
   ([token-seq word-count]
-     (generate-token-sequences token-seq word-count false)))
+     (generate-chunk-sequences token-seq word-count false)))
 
 
 (defn ngram-similarity ^Double [^Integer chunk-size ^Integer ngram-count ^String phrase1 ^String phrase2]
@@ -46,14 +46,14 @@ ngram-count grams based on phrases chunk-size long. All permutations
 are compared"
   ;(println "similar-phrase? called" phrase1 phrase2)
   (let
-      [tok-seq1 (generate-token-sequences phrase1 chunk-size true)
-       tok-seq2 (generate-token-sequences phrase2 chunk-size true)]
-    (if  (not-any? empty? [phrase1 phrase2 tok-seq1 tok-seq2])
+      [chunk-seq1 (generate-chunk-sequences phrase1 chunk-size true)
+       chunk-seq2 (generate-chunk-sequences phrase2 chunk-size true)]
+    (if  (not-any? empty? [phrase1 phrase2 chunk-seq1 chunk-seq2])
       (apply max 
-             (map
+             (pmap
               (fn [[t1 t2]]
                 (dice-coefficient 
                  (ngrams ngram-count t1)
                  (ngrams ngram-count t2)))
-              (for [tok1 tok-seq1 tok2 tok-seq2] [tok1 tok2])))
+              (for [chunk1 chunk-seq1 chunk2 chunk-seq2] [chunk1 chunk2])))
       0.0)))

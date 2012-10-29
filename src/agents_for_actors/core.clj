@@ -3,16 +3,19 @@
             [clojure.zip :as z]
             [clojure.string :as s]
             [agents-for-actors.similitude :as sim]
-            [agents-for-actors.ngram :as ngram]))
+            [agents-for-actors.ngram :as ngram]
+            [agents-for-actors.neo4j :as neo4j]))
 
 (defn -main 
   "Start Agents for Actors with a few sample values. No error handling yet at this level" 
-  [min-confidence chunk-size ngram-count source-file target-file] 
+  [min-confidence chunk-size ngram-count source-file target-file load-to-db] 
   (let
-      [first-folio (x/read-xml source-file)
-       first-folio-filtered (x/extract-text-nodes first-folio '(:stage :castList :teiHeader :speaker :head :front))
-       transcript (x/read-xml target-file)
-       transcript-filtered (x/extract-text-nodes transcript '(:stage :castList :teiHeader :speaker :front))]
+      [src (x/read-xml source-file)
+       source-filtered (x/extract-text-nodes src '(:stage :castList :teiHeader :speaker :head :front))
+       target (x/read-xml target-file)
+       target-filtered (x/extract-text-nodes target '(:stage :castList :teiHeader :speaker :front))
+       ag (if (= load-to-db "true")
+            (neo4j/bulk-load source-filtered target-filtered source-file target-file))]
     (println "<results>")
     (println "<min-confidence>" min-confidence "</min-confidence>")
     (println "<chunk-size>" chunk-size "</chunk-size>")
@@ -28,12 +31,17 @@
                                            (Integer/parseInt ngram-count) p1 p2))
                  (Double/parseDouble min-confidence)
                  %
-                 first-folio-filtered)
-               transcript-filtered))
+                 source-filtered)
+               target-filtered))
            :when (not (empty? s)) ;explicitly exclude those runs that returned nil
            ]
-       (println "<result confidence='" (:confidence s) "'><phrase>" (x/loc-tostr (:phrase s)) "</phrase><source>" (x/loc-tostr (:source s)) "</source></result>")
-       ))
+       (do
+         (if (= load-to-db "true")
+           (do
+             (await ag)
+             (neo4j/load-link (:source s) (:phrase s))))
+         (println "<result confidence='" (:confidence s) "'><phrase>" (x/loc-tostr (:phrase s)) "</phrase><source>" (x/loc-tostr (:source s)) "</source></result>")
+       )))
     (println "</results>")))
     
 

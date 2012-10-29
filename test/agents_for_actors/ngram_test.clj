@@ -37,17 +37,17 @@
       (is (= (dice-coefficient set1 set5) 0.0))
       (is (= (dice-coefficient set2 set3) (/ 2.0 3.0))))))
 
-(deftest generate-token-sequences-test
+(deftest generate-chunk-sequences-test
   (testing "Generate Token Sequences"
-    (is (= (generate-token-sequences '("ab" "cd" "hij") 2 true)
+    (is (= (generate-chunk-sequences '("ab" "cd" "hij") 2 true)
            '("ab cd" "cd hij")))
-    (is (= (generate-token-sequences '("ab" "cd" "hij") 2 false)
+    (is (= (generate-chunk-sequences '("ab" "cd" "hij") 2 false)
            '("ab cd" "hij")))
-    (is (= (generate-token-sequences "Silence, Silence for the King" 5)
+    (is (= (generate-chunk-sequences "Silence, Silence for the King" 5)
            '("Silence Silence for the King")))
-    (is (= (generate-token-sequences "Silence, Silence for the King" 3)
+    (is (= (generate-chunk-sequences "Silence, Silence for the King" 3)
            '("Silence Silence for" "the King")))
-    (is (= (generate-token-sequences "Silence, Silence for the King" 3 true)
+    (is (= (generate-chunk-sequences "Silence, Silence for the King" 3 true)
            '("Silence Silence for" "Silence for the" "for the King")))
-    (is (= (generate-token-sequences "Silence, Silence for the King" 100)
+    (is (= (generate-chunk-sequences "Silence, Silence for the King" 100)
            '("Silence Silence for the King")))))
