@@ -27,9 +27,9 @@ This calls a double NGram algorithm for the comparison of source and target frag
 ##Visualization
 Per default AfA uses the Open Source Neo4j graph database to visualize a dependency graph:
 
-<img src="https://github.com/mwkuster/agents-for-actors/tree/master/doc/neo4j_screenshot.png" title="Screenshot of Neo4j with ciations" align="left" padding="5px" />
+<img src="https://raw.github.com/mwkuster/agents-for-actors/master/doc/neo4j_screenshot.png" title="Screenshot of Neo4j with citations" align="left" padding="5px" />
 
-Any other visualization mechanism (including none) can be added by adding specialized methods to the multimethods initialize and visualize:
+Other visualization mechanisms (including none) can be added by adding specialized methods to the multimethods initialize and visualize:
 ```clojure
 (defmulti initialize
   "Initialize the visualization subsystem"
