@@ -22,7 +22,7 @@ Agents for Actors can be called directly on the command line, using as only comm
  :result-file "res1.xml"}
 ```
 
-This calls a double NGram algorithm for the comparison of source and target fragments.
+This calls a double NGram algorithm for the comparison of source and target fragments. Since the architecture is pluggable, you can also experiment with any other similarity algorithm and measure.
 
 ##Visualization
 Per default AfA uses the Open Source Neo4j graph database to visualize a dependency graph:
