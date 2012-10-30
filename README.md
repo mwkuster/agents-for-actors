@@ -1,4 +1,50 @@
 agents-for-actors
 =================
 
-Agents for actors, a Digital Humanities framework for distributed, workflow-driven microservices for text analysis and visualization
+Agents for Actors (AfA), a Digital Humanities framework for distributed microservices for text analysis and visualization
+
+##Why?
+Agents for Actors were born out of the desire to find fuzzy links and allusions between literary texts and their sources. 
+
+##Usage
+
+Agents for Actors can be called directly on the command line, using as only command line parameter the path to a configuration file that is simply a Clojure map (cf. resources/configuration_template.clj for an example):
+
+```clojure
+{:min-confidence 0.65, 
+ :chunk-size 6,
+ :ngram-count 4,
+ :source-file "first-folio.xml",
+ :source-tags-filtered  '(:stage :castList :teiHeader :speaker :head :front),
+ :target-file "transcript.xml",
+ :target-tags-filtered '(:stage :castList :teiHeader :speaker :front),
+ :visualization-framework "Neo4j",
+ :result-file "res1.xml"}
+```
+
+This calls a double NGram algorithm for the comparison of source and target fragments.
+
+##Visualization
+Per default AfA uses the Open Source Neo4j graph database to visualize a dependency graph:
+
+<img src="https://github.com/mwkuster/agents-for-actors/tree/master/doc/neo4j_screenshot.png" title="Screenshot of Neo4j with ciations" align="left" padding="5px" />
+
+Any other visualization mechanism (including none) can be added by adding specialized methods to the multimethods initialize and visualize:
+```clojure
+(defmulti initialize
+  "Initialize the visualization subsystem"
+  (fn [src-name target-name]
+    (:visualization-framework par/*parameters*)))
+
+(defmulti visualize 
+  "Visualize given connections using a suitable visualization framework"
+  (fn [prev-loc src-name location link-type]
+    (:visualization-framework par/*parameters*)))
+```
+
+##License
+
+AfA is released under the GNU Lesser Public Licence (http://www.gnu.org/copyleft/lesser.html)
+
+
+
