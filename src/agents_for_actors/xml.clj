@@ -35,6 +35,18 @@ representation of an XPointer"
                      (reverse (xpointer node-loc))))]
     (str "xpointer(/" xpath ")")))
 
+(defn parameters-tostr [parameter-map]
+  "Take a parameter map and return it as XML"
+  (str
+   "<parameters>"
+   (s/join
+    (for
+        [k (keys parameter-map)]
+      (let
+          [key-to-tag (subs (str k) 1)]
+        (str "<" key-to-tag ">" (get parameter-map k) "</" key-to-tag ">\n"))))
+   "</parameters>"))
+
 (defn xml-ancestors 
   "Return the tag symbols for the xml-ancestors of the current node-location"
   [node-loc]

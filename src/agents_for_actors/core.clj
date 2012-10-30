@@ -6,6 +6,9 @@
             [agents-for-actors.ngram :as ngram]
             [agents-for-actors.neo4j :as neo4j]))
 
+(def ^:dynamic *parameters* 
+  {:visualization-framework "Neo4j"})
+
 (defn -main 
   "Start Agents for Actors with a few sample values. No error handling yet at this level" 
   [min-confidence chunk-size ngram-count source-file target-file load-to-db] 
@@ -15,13 +18,16 @@
        target (x/read-xml target-file)
        target-filtered (x/extract-text-nodes target '(:stage :castList :teiHeader :speaker :front))
        ag (if (= load-to-db "true")
-            (neo4j/bulk-load source-filtered target-filtered source-file target-file))]
+            (do
+              (neo4j/neo4j-init)
+              (neo4j/bulk-load source-filtered target-filtered source-file target-file)))]
     (println "<results>")
-    (println "<min-confidence>" min-confidence "</min-confidence>")
-    (println "<chunk-size>" chunk-size "</chunk-size>")
-    (println "<ngram-count>" ngram-count "</ngram-count>")
-    (println "<source-file>" source-file "</source-file>")
-    (println "<target-file>" target-file "</target-file>")
+    (println x/parameters-tostr 
+             {:min-confidence min-confidence, 
+              :chunk-size chunk-size,
+              :ngram-count ngram-count,
+              :source-file source-file,
+              :target-file target-file})
     (doall 
      (for [s (flatten ;Caution: map alone would build a list of lists
               (pmap 

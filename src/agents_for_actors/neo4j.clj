@@ -7,14 +7,17 @@
             [clojure.zip :as z]))
 
 (def ^:dynamic *connection-string* "http://localhost:7474/db/data/")
-(nr/connect! *connection-string*)
+(def ^:dynamic *root*)
 
-(def root (nn/get 0))
+(defn neo4j-init []
+  (nr/connect! *connection-string*)
+  (def *root* (nn/get 0)))
+
 
 (defn create-source [source-name]
   (let
       [src-node (nn/create {:name source-name})]
-    (nrl/create root src-node :root)
+    (nrl/create *root* src-node :root)
     src-node))
     
 
@@ -48,7 +51,7 @@ creating also nodes representing the source and target files"
   (let
       [tr-src (create-source target-name)
        ff-src (create-source src-name)
-       visualization-agent (agent root)
+       visualization-agent (agent *root*)
        ll-fn (fn [prev src-node loc]
                (load-location src-node loc))]
     (doseq 
