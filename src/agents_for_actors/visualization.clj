@@ -28,6 +28,6 @@ identified by its xptr, and a target node, identified as a
 location. The target node is if necessary created"
   (let
       [src-node (neo4j/get-by-xptr src-name)]
-    (neo4j/load-location src-node location)
+    (neo4j/load-location src-node location link-type)
     location))
             

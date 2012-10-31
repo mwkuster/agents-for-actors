@@ -24,7 +24,7 @@
        min-confidence (:min-confidence par/*parameters*)
        visualization-agent (agent (z/root src))
        log-agent (agent (:result-file par/*parameters*))
-       log (fn[result-file msg] (spit result-file msg :append true) result-file)]
+       log (fn[result-file msg] (spit result-file (str msg "\n") :append true) result-file)]
     
     (vis/initialize source-file target-file)
     (doseq
@@ -52,9 +52,11 @@
            ]
        (do
          (send visualization-agent vis/visualize 
-               (x/xpointer-tostr (:source s))
-               (:phrase s) :cites)
+               (:phrase s) 
+               (x/xpointer-tostr (:source s)) :cites)
          (send log-agent log (str "<result confidence='" (:confidence s) "'><phrase>" (x/loc-tostr (:phrase s)) "</phrase><source>" (x/loc-tostr (:source s)) "</source></result>"))
        )))
     (send log-agent log "</results>")
+    (await visualization-agent)
+    (await log-agent)
     (shutdown-agents)))

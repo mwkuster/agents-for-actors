@@ -19,14 +19,15 @@
 (defn neo4j-init [source-name target-name]
   (nr/connect! *connection-string*)
   (def ^:dynamic *root* (nn/get 0))
-  (nn/create-index "xptr" {:unique true})
+  (if (not-any? #(= "xptr" (:name %)) (nn/all-indexes))
+    (nn/create-index "xptr" {:unique true}))
   (create-source source-name)
   (create-source target-name))
 
 (defn get-by-xptr [xptr]
   (nn/find-one "xptr" "xptr" xptr))
 
-(defn load-location [src-node loc]
+(defn load-location [src-node loc link-type]
   "Take a location and load it as objects to Neo4j, if it does not yet exist. Link it to its source node"
   (let 
       [xptr (x/xpointer-tostr loc)
@@ -35,7 +36,7 @@
                    n
                    (nn/create {:xptr xptr :name (z/node loc)}))]
     (nn/add-to-index (:id new-node) "xptr" "xptr" xptr)
-    (nrl/create src-node new-node :part-of)))
+    (nrl/create src-node new-node link-type)))
 
 ;; (defn get-node-for-location [loc]
 ;;   "Retrieve the Neo4j node for a location (if existing) and return it"
