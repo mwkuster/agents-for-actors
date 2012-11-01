@@ -1,7 +1,8 @@
 (ns agents-for-actors.visualization
   (:require [agents-for-actors.xml :as x]
             [agents-for-actors.neo4j :as neo4j]
-            [agents-for-actors.parameter :as par]))
+            [agents-for-actors.parameter :as par])
+  (:use [clojure.tools.logging :only (info error)]))
 
 (defmulti initialize
   "Initialize the visualization subsystem"
@@ -28,6 +29,7 @@ identified by its xptr, and a target node, identified as a
 location. The target node is if necessary created"
   (let
       [src-node (neo4j/get-by-xptr src-name)]
+    (info "Handling " (x/xpointer-tostr location))
     (neo4j/load-location src-node location link-type)
     location))
             

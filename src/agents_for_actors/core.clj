@@ -23,20 +23,20 @@
        ngram-count (:ngram-count par/*parameters*)
        min-confidence (:min-confidence par/*parameters*)
        visualization-agent (agent (z/root src))
-       log-agent (agent (:result-file par/*parameters*))
-       log (fn[result-file msg] (spit result-file (str msg "\n") :append true) result-file)]
+       xml-agent (agent (:result-file par/*parameters*))
+       xml (fn[result-file msg] (spit result-file (str msg "\n") :append true) result-file)]
     
     (vis/initialize source-file target-file)
     (doseq
         [loc source-filtered]
-        (send visualization-agent vis/visualize source-file loc :part-of))
+        (send-off visualization-agent vis/visualize source-file loc :part-of))
     (doseq
         [loc target-filtered]
-        (send visualization-agent vis/visualize target-file loc :part-of))
+        (send-off visualization-agent vis/visualize target-file loc :part-of))
     
     
-    (send log-agent log "<results>")
-    (send log-agent log (x/parameters-tostr par/*parameters*))
+    (send xml-agent xml "<results>")
+    (send xml-agent xml (x/parameters-tostr par/*parameters*))
     (doall 
      (for [s (flatten ;Caution: map alone would build a list of lists
               (pmap 
@@ -51,12 +51,13 @@
            :when (not (empty? s)) ;explicitly exclude those runs that returned nil
            ]
        (do
-         (send visualization-agent vis/visualize 
+         (send-off visualization-agent vis/visualize 
                (:phrase s) 
                (x/xpointer-tostr (:source s)) :cites)
-         (send log-agent log (str "<result confidence='" (:confidence s) "'><phrase>" (x/loc-tostr (:phrase s)) "</phrase><source>" (x/loc-tostr (:source s)) "</source></result>"))
+         (send xml-agent xml (str "<result confidence='" (:confidence s) "'><phrase>" (x/loc-tostr (:phrase s)) "</phrase><source>" (x/loc-tostr (:source s)) "</source></result>"))
        )))
-    (send log-agent log "</results>")
+    (send xml-agent xml "</results>")
+    (println "Preparing for shutdown")
     (await visualization-agent)
-    (await log-agent)
+    (await xml-agent)
     (shutdown-agents)))

@@ -5,6 +5,7 @@
             :url "http://www.gnu.org/copyleft/lesser.html"
             :comments "Author: Marc Wilhelm Küster"}
   :dependencies [[org.clojure/clojure "1.4.0"]
+                 [org.clojure/tools.logging "0.2.3"]
                  [clojurewerkz/neocons "1.1.0-beta1"]]
   :main agents-for-actors.core
   :jvm-opts ["-Xmx1g"])
