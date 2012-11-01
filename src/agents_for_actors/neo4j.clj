@@ -13,7 +13,7 @@
   (nn/find-one "xptr" "xptr" xptr))
 
 (defn get-link-by-xptr [link-id]
-  (nrl/find-one "link-by-xptr" "link-by-xptr" link-id))
+  (nrl/find-one "link-by-xptr" :link-text link-id))
 
 (defn create-source [source-name]
   (let
@@ -26,7 +26,9 @@
     (if (not n)
       (nn/add-to-index (:id src-node) "xptr" "xptr" source-name true))
     (if (not (get-link-by-xptr link-id))
-      (nrl/create *root* src-node :root {:link-text link-id}))
+      (let
+          [rel (nrl/create *root* src-node :root {:link-text link-id})]
+        (nrl/add-to-index (:id rel)  "link-by-xptr" :link-text link-id)))
     src-node))
 
 (defn neo4j-init [source-name target-name]
@@ -34,7 +36,7 @@
   (def ^:dynamic *root* (nn/get 0))
   (if (not-any? #(= "xptr" (:name %)) (nn/all-indexes))
     (nn/create-index "xptr" {:unique true}))
-  (if (not-any? #(= "link-by-xptr" (:name %)) (nn/all-indexes))
+  (if (not-any? #(= "link-by-xptr" (:name %)) (nrl/all-indexes))
     (nrl/create-index "link-by-xptr"))
   (create-source source-name)
   (create-source target-name))
@@ -53,7 +55,10 @@
     (if (not n)
       (nn/add-to-index (:id new-node) "xptr" "xptr" xptr))
     (if (not (get-link-by-xptr link-id))
-      (nrl/create src-node new-node link-type {:link-text link-id}))))
+      (let
+          [new-rel (nrl/create src-node new-node link-type {:link-text link-id})]
+        (nrl/add-to-index (:id new-rel)  "link-by-xptr" :link-text link-id)))
+        ))
 
 ;; (defn get-node-for-location [loc]
 ;;   "Retrieve the Neo4j node for a location (if existing) and return it"
