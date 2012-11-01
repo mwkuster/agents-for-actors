@@ -10,7 +10,7 @@
 (def ^:dynamic *root*)
 
 (defn get-by-xptr [xptr]
-  (nn/find-one "xptr" "xptr" xptr))
+  (nn/find-one "xptr" :xptr xptr))
 
 (defn get-link-by-xptr [link-id]
   (nrl/find-one "link-by-xptr" :link-text link-id))
@@ -24,7 +24,7 @@
          (nn/create {:name source-name :xptr source-name}))
        link-id (str "root:root->" source-name)]
     (if (not n)
-      (nn/add-to-index (:id src-node) "xptr" "xptr" source-name true))
+      (nn/add-to-index (:id src-node) "xptr" :xptr source-name true))
     (if (not (get-link-by-xptr link-id))
       (let
           [rel (nrl/create *root* src-node :root {:link-text link-id})]
