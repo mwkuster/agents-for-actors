@@ -46,7 +46,7 @@
   "Take a location and load it as objects to Neo4j, if it does not yet exist. Link it to its source node"
   (let 
       [xptr (x/xpointer-tostr loc)
-       src-xptr (get src-node "xptr")
+       src-xptr (:xptr (:data src-node))
        n (get-by-xptr xptr)
        new-node  (if n
                    n

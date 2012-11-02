@@ -29,10 +29,10 @@
     (vis/initialize source-file target-file)
     (doseq
         [loc source-filtered]
-        (send-off visualization-agent vis/visualize source-file loc :part-of))
+      (send-off visualization-agent vis/visualize source-file loc :part-of))
     (doseq
         [loc target-filtered]
-        (send-off visualization-agent vis/visualize target-file loc :part-of))
+      (send-off visualization-agent vis/visualize target-file loc :part-of))
     
     
     (send xml-agent xml "<results>")
@@ -52,8 +52,8 @@
            ]
        (do
          (send-off visualization-agent vis/visualize 
-               (:phrase s) 
-               (x/xpointer-tostr (:source s)) :cites)
+               (x/xpointer-tostr (:phrase s))
+               (:source s) :cites)
          (send xml-agent xml (str "<result confidence='" (:confidence s) "'><phrase>" (x/loc-tostr (:phrase s)) "</phrase><source>" (x/loc-tostr (:source s)) "</source></result>"))
        )))
     (send xml-agent xml "</results>")
