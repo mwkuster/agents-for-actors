@@ -2,6 +2,4 @@
   (:use clojure.test
         agents-for-actors.core))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+; no test defined yet for core.clj

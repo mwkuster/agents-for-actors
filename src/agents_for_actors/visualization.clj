@@ -38,15 +38,13 @@ location. The target node is if necessary created"
     location))
 
 (defmethod visualize "Excel" [prev-loc src-name location link-type]
-  "Store in an Excel file a row with a "
-  (let
-      [src-node (neo4j/get-by-xptr src-name)]
-    (info "Handling " (x/xpointer-tostr location))
-    (excel/add-row src-node location link-type)))
+  "Store in an Excel file a row with all information on links"
+  (info "Handling " (x/xpointer-tostr location))
+  (excel/add-row src-name location link-type))
 
 (defmulti finalize 
   "Finalize the connection"
-  (fn [src-name]
+  (fn [prev-loc src-name]
     (:visualization-framework par/*parameters*)))
 
 (defmethod finalize "None" [prev-loc src-name]

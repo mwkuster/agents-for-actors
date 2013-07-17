@@ -44,7 +44,6 @@ all having word-count elements (cf. tests)"
 calculates the confidence for the similairty of two phrases, using
 ngram-count grams based on phrases chunk-size long. All permutations
 are compared"
-  ;(println "similar-phrase? called" phrase1 phrase2)
   (let
       [chunk-seq1 (generate-chunk-sequences phrase1 chunk-size true)
        chunk-seq2 (generate-chunk-sequences phrase2 chunk-size true)]
