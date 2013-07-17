@@ -57,6 +57,7 @@
          (send xml-agent xml (str "<result confidence='" (:confidence s) "'><phrase>" (x/loc-tostr (:phrase s)) "</phrase><source>" (x/loc-tostr (:source s)) "</source></result>"))
        )))
     (send xml-agent xml "</results>")
+    (send-off visualization-agent vis/finalize source-file)
     (println "Preparing for shutdown")
     (await visualization-agent)
     (await xml-agent)

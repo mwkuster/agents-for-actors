@@ -6,6 +6,7 @@
             :comments "Author: Marc Wilhelm Küster"}
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [org.clojure/tools.logging "0.2.3"]
-                 [clojurewerkz/neocons "1.1.0-beta1"]]
+                 [clojurewerkz/neocons "1.1.0"]
+                 [incanter "1.3.0"]]
   :main agents-for-actors.core
   :jvm-opts ["-Xmx1g"])

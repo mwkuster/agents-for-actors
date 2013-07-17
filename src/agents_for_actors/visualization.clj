@@ -1,6 +1,7 @@
 (ns agents-for-actors.visualization
   (:require [agents-for-actors.xml :as x]
             [agents-for-actors.neo4j :as neo4j]
+            [agents-for-actors.excel :as excel]
             [agents-for-actors.parameter :as par])
   (:use [clojure.tools.logging :only (info error)]))
 
@@ -14,6 +15,9 @@
 
 (defmethod initialize "Neo4j" [src-name target-name]
   (neo4j/neo4j-init src-name target-name))
+
+(defmethod initialize "Excel" [src-name target-name]
+  (excel/excel-init src-name target-name))
 
 (defmulti visualize 
   "Visualize given connections using a suitable visualization framework"
@@ -32,4 +36,25 @@ location. The target node is if necessary created"
     (info "Handling " (x/xpointer-tostr location))
     (neo4j/load-location src-node location link-type)
     location))
-            
+
+(defmethod visualize "Excel" [prev-loc src-name location link-type]
+  "Store in an Excel file a row with a "
+  (let
+      [src-node (neo4j/get-by-xptr src-name)]
+    (info "Handling " (x/xpointer-tostr location))
+    (excel/add-row src-node location link-type)))
+
+(defmulti finalize 
+  "Finalize the connection"
+  (fn [src-name]
+    (:visualization-framework par/*parameters*)))
+
+(defmethod finalize "None" [prev-loc src-name]
+  nil)
+
+(defmethod finalize "Neo4j" [prev-loc src-name]
+  nil)
+
+(defmethod finalize "Excel" [prev-loc src-name]
+  (excel/save-file src-name))
+
