@@ -4,7 +4,7 @@
 
 (use '(incanter core charts excel))
 
-(def ^:dynamic *excel-sheet* (atom {}))
+(def ^:dynamic *excel-sheet* (atom '()))
 
 (defn excel-init [source-name target-name]
   "Setup an Excel file"
@@ -15,14 +15,10 @@
   (let 
       [xptr (x/xpointer-tostr location)
        src-xptr (x/xpointer-tostr (:xptr (:data src-name)))]
-                                        ; (println {:src-name src-xptr, :location xptr, :link-type link-type})
-    (swap! *excel-sheet* conj {:src-name src-xptr, :location xptr, :link-type link-type})))
+    (swap! *excel-sheet* conj {:str-name src-name, :src-xptr src-xptr, :location xptr, :link-type link-type})))
 
 (defn save-file [source-name]
   "Save the save Excel information to file"
-  ;(println @*excel-sheet*)
-  (println source-name)
-  ;(save-xls (to-dataset (get @*excel-sheet* source-name)) (str source-name ".xls")))
-  (save-xls (to-dataset (get @*excel-sheet* source-name)) "/tmp/result.xls"))
+  (save-xls (to-dataset @*excel-sheet*) "/tmp/result.xls"))
 
 
