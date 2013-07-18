@@ -19,6 +19,7 @@
 
 (defn save-file [source-name]
   "Save the save Excel information to file"
-  (save-xls (to-dataset @*excel-sheet*) "/tmp/result.xls"))
+  (println "Starting to save the Excel file")
+  (save-xls (to-dataset @*excel-sheet*) "/tmp/result.xlsx"))
 
 
