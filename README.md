@@ -19,8 +19,15 @@ Agents for Actors can be called directly on the command line, using as only comm
  :target-file "transcript.xml",
  :target-tags-filtered '(:stage :castList :teiHeader :speaker :front),
  :visualization-framework "Neo4j",
+ ; set of parameters specific to a given visualization framework
+ :visualization-framework-parameters {
+  :connection-string "http://YOURLOGIN:YOURPASSWORD@localhost:7474/db/data/"
+  }
  :result-file "res1.xml"}
 ```
+
+(this sample assumes that an instance of neo4j is running under http://localhost:7474 with suitable authentication information)
+
 
 This calls a double NGram algorithm for the comparison of source and target fragments. Since the architecture is pluggable, you can also experiment with any other similarity algorithm and measure.
 
@@ -41,6 +48,8 @@ Other visualization mechanisms (including none) can be added by adding specializ
   (fn [prev-loc src-name location link-type]
     (:visualization-framework par/*parameters*)))
 ```
+
+The current version of AfA has been updated to work with Neo4j version 2.3.2.
 
 ##License
 

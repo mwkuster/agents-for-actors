@@ -14,7 +14,9 @@
   nil)
 
 (defmethod initialize "Neo4j" [src-name target-name]
-  (neo4j/neo4j-init src-name target-name))
+  (let
+      [framework-params (:visualization-framework-parameters par/*parameters*)]
+    (neo4j/neo4j-init src-name target-name framework-params)))
 
 (defmethod initialize "Excel" [src-name target-name]
   (excel/excel-init src-name target-name))
