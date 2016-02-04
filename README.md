@@ -51,6 +51,7 @@ Other visualization mechanisms (including none) can be added by adding specializ
 
 The current version of AfA has been updated to work with Neo4j version 2.3.2.
 
+
 ##License
 
 AfA is released under the GNU Lesser Public Licence (http://www.gnu.org/copyleft/lesser.html)

@@ -62,3 +62,11 @@
           [new-rel (nrl/create *conn* src-node new-node link-type {:link-text link-id})]
         (nrl/add-to-index *conn* (:id new-rel)  "link-by-xptr" :link-text link-id)))
         ))
+
+(defn finalize []
+  "Print out the results found and then close the connection to Neo4j"
+  (let
+      [res
+       (cy/tquery *conn* "MATCH ()-[r:`cites`]->() RETURN r")]
+    (println res)
+    (def ^:dynamic *conn* nil)))
