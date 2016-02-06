@@ -53,7 +53,8 @@ location. The target node is if necessary created"
   nil)
 
 (defmethod finalize "Neo4j" [prev-loc src-name]
-  (neo4j/finalize))
+  (neo4j/finalize
+   (:visualization-framework-parameters par/*parameters*)))
 
 (defmethod finalize "Excel" [prev-loc src-name]
   (excel/save-file src-name))

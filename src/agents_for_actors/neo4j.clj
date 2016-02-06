@@ -4,6 +4,7 @@
             [clojurewerkz.neocons.rest.relationships :as nrl]
             [clojurewerkz.neocons.rest.cypher :as cy]
             [agents-for-actors.xml :as x]
+            [cheshire.core :as cheshire]
             [clojure.zip :as z]))
 
 (def ^:dynamic *root*)
@@ -63,10 +64,14 @@
         (nrl/add-to-index *conn* (:id new-rel)  "link-by-xptr" :link-text link-id)))
         ))
 
-(defn finalize []
+(defn finalize [pars]
   "Print out the results found and then close the connection to Neo4j"
-  (let
-      [res
-       (cy/tquery *conn* "MATCH ()-[r:`cites`]->() RETURN r")]
-    (println res)
-    (def ^:dynamic *conn* nil)))
+  (println pars)
+  (if (contains? pars :neo4j-results)
+    (let
+        [citations
+         (cy/tquery *conn* "MATCH (f)-[r:`cites`]->(t) RETURN f, r,t")
+         results (:neo4j-results pars)]
+      (cheshire/generate-stream citations
+                                (clojure.java.io/writer results))))
+  (def ^:dynamic *conn* nil))
