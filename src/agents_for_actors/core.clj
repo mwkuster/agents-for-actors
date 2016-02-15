@@ -17,8 +17,12 @@
        src (x/read-xml source-file)
        source-filtered (x/extract-text-nodes src (:source-tags-filtered par/*parameters*))
        target-file (:target-file par/*parameters*)
-       target (x/read-xml target-file)
-       target-filtered (x/extract-text-nodes target (:target-tags-filtered par/*parameters*))
+       target (if (= source-file target-file) ;Optimization for the case that input file and output file are identical
+                src
+                (x/read-xml target-file))
+       target-filtered (if (= source-file target-file)
+         source-filtered
+         (x/extract-text-nodes target (:target-tags-filtered par/*parameters*)))
        chunk-size (:chunk-size par/*parameters*)
        ngram-count (:ngram-count par/*parameters*)
        min-confidence (:min-confidence par/*parameters*)

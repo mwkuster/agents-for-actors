@@ -10,5 +10,5 @@
                  [cheshire "5.5.0"]
                  [incanter "1.3.0"]]
   :main agents-for-actors.core
-  :jvm-opts ["-Xmx1g"])
+  :jvm-opts ["-Xmx4g"])
 
