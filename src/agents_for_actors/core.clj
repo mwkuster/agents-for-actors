@@ -58,7 +58,7 @@
          (send-off visualization-agent vis/visualize 
                (x/xpointer-tostr (:phrase s))
                (:source s) :cites)
-         (send xml-agent xml (str "<result confidence='" (:confidence s) "'><phrase>" (x/loc-tostr (:phrase s)) "</phrase><source>" (x/loc-tostr (:source s)) "</source></result>"))
+         (send xml-agent xml (str "<result confidence='" (:confidence s) "'><phrase hit='" (:t1 s) "'>" (x/loc-tostr (:phrase s)) "</phrase><source hit='" (:t2 s) "'>" (x/loc-tostr (:source s)) "</source></result>"))
        )))
     (send xml-agent xml "</results>")
     (send-off visualization-agent vis/finalize source-file)

@@ -11,10 +11,11 @@ with a dice coefficient) that returns a confidence in [0..1] for
 comparision"
   (let
       [res (for [p-loc source-seq 
-                 :let [confidence (similarity-fn (z/node p-loc) (z/node phrase-loc))]
+                 :let [best-hit (similarity-fn (z/node p-loc) (z/node phrase-loc))
+                       confidence (:weight best-hit)]
                  :when (> confidence min-confidence)]
              (do
-               {:phrase phrase-loc :source p-loc :confidence confidence}))]
+               {:phrase phrase-loc :source p-loc :confidence confidence :t1 (:t1 best-hit) :t2 (:t2 best-hit)}))]
        (filter #(not (empty? %)) res)))
       
         

@@ -48,11 +48,18 @@ are compared"
       [chunk-seq1 (generate-chunk-sequences phrase1 chunk-size true)
        chunk-seq2 (generate-chunk-sequences phrase2 chunk-size true)]
     (if  (not-any? empty? [phrase1 phrase2 chunk-seq1 chunk-seq2])
-      (apply max 
-             (pmap
-              (fn [[t1 t2]]
-                (dice-coefficient 
-                 (ngrams ngram-count t1)
-                 (ngrams ngram-count t2)))
-              (for [chunk1 chunk-seq1 chunk2 chunk-seq2] [chunk1 chunk2])))
-      0.0)))
+      (let
+          [weighted-links
+           (pmap
+            (fn [[t1 t2]]
+              {:weight
+               (dice-coefficient 
+                (ngrams ngram-count t1)
+                (ngrams ngram-count t2))
+               :t1 t1
+               :t2 t2 })
+            (for [chunk1 chunk-seq1 chunk2 chunk-seq2] [chunk1 chunk2])),
+           max-weight (apply max (map :weight weighted-links))]
+        ; review this code
+        (first (filter #(= max-weight (:weight %)) weighted-links)))
+      {:weight 0.0})))
