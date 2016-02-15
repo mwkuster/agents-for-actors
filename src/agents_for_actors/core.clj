@@ -27,7 +27,8 @@
        ngram-count (:ngram-count par/*parameters*)
        min-confidence (:min-confidence par/*parameters*)
        visualization-agent (agent (z/root src))
-       xml-agent (agent (:result-file par/*parameters*))
+       result-fn  (str (:result-file par/*parameters*) "." (quot (System/currentTimeMillis) 1000))
+       xml-agent (agent result-fn)
        xml (fn[result-file msg] (spit result-file (str msg "\n") :append true) result-file)]
     
     (vis/initialize source-file target-file)
@@ -37,7 +38,6 @@
     (doseq
         [loc target-filtered]
       (send-off visualization-agent vis/visualize target-file loc :part-of))
-    
     
     (send xml-agent xml "<results>")
     (send xml-agent xml (x/parameters-tostr par/*parameters*))

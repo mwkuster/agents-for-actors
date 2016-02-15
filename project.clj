@@ -1,4 +1,4 @@
-(defproject agents-for-actors "0.7.0-SNAPSHOT"
+(defproject agents-for-actors "0.8.0-SNAPSHOT"
   :description "Agents for actors, a Digital Humanities framework for distributed, workflow-driven microservices for text analysis and visualization"
   :url "https://github.com/mwkuster/agents-for-actors"
   :license {:name "GNU Lesser Public License"
@@ -10,5 +10,5 @@
                  [cheshire "5.5.0"]
                  [incanter "1.3.0"]]
   :main agents-for-actors.core
-  :jvm-opts ["-Xmx4g"])
+  :jvm-opts ["-Xmx7g"])
 
