@@ -10,7 +10,8 @@
 
 (defn -main 
   "Start Agents for Actors with a few sample values. No error handling yet at this level" 
-  [conf-file] 
+  [conf-file]
+  (println "Starting up" (new java.util.Date))
   (par/set-parameters (load-file conf-file))
   (let
       [source-file (:source-file par/*parameters*)
@@ -54,27 +55,16 @@
                             min-confidence
                             target-line
                             source-filtered)]
-                     (println "Result")
                      (doseq
                          [s links
                           :when (not (empty? s))]
-                       (println (:t2 s))
                        (send-off visualization-agent vis/visualize 
                                  (x/xpointer-tostr (:phrase s))
                                  (:source s) :cites)
                        (send xml-agent xml (str "<result confidence='" (:confidence s) "'><phrase hit='" (:t1 s) "'>" (x/loc-tostr (:phrase s)) "</phrase><source hit='" (:t2 s) "'>" (x/loc-tostr (:source s)) "</source></result>"))))
                      nil)))
       (doall (map #(await %) link-agents)))
-      ;; (println "links")
-      ;; (doseq
-      ;;     [s links
-      ;;      :when (not (empty? s)) ;explicitly exclude those runs that returned nil
-      ;;      ]
-      ;;   (send-off visualization-agent vis/visualize 
-      ;;             (x/xpointer-tostr (:phrase s))
-      ;;             (:source s) :cites)
-      ;;   (send xml-agent xml (str "<result confidence='" (:confidence s) "'><phrase hit='" (:t1 s) "'>" (x/loc-tostr (:phrase s)) "</phrase><source hit='" (:t2 s) "'>" (x/loc-tostr (:source s)) "</source></result>"))
-      ;;  ))
+   
     (send xml-agent xml "</results>")
     (send-off visualization-agent vis/finalize source-file)
     (println "Preparing for shutdown" (new java.util.Date))
