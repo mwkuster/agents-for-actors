@@ -42,7 +42,6 @@
     (send xml-agent xml "<results>")
     (send xml-agent xml (x/parameters-tostr par/*parameters*))
     (let [link-futures
-          (doall
            ;(flatten ;Caution: map alone would build a list of lists
               (map 
                #(future
@@ -53,8 +52,8 @@
                    min-confidence
                    %
                    source-filtered))
-               target-filtered))
-          links (flatten (map deref link-futures))]
+               target-filtered)
+          links (doall (flatten (map deref link-futures)))]
       (println "links")
       (doseq
           [s links
