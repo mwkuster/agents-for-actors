@@ -41,28 +41,43 @@
     
     (send xml-agent xml "<results>")
     (send xml-agent xml (x/parameters-tostr par/*parameters*))
-    (doall 
-     (for [s (flatten ;Caution: map alone would build a list of lists
-              (pmap 
-               #(sim/find-similarities 
-                 (fn [p1 p2] 
-                   (ngram/ngram-similarity chunk-size
-                                           ngram-count p1 p2))
-                 min-confidence
-                 %
-                 source-filtered)
-               target-filtered))
-           :when (not (empty? s)) ;explicitly exclude those runs that returned nil
-           ]
-       (do
-         (send-off visualization-agent vis/visualize 
-               (x/xpointer-tostr (:phrase s))
-               (:source s) :cites)
-         (send xml-agent xml (str "<result confidence='" (:confidence s) "'><phrase hit='" (:t1 s) "'>" (x/loc-tostr (:phrase s)) "</phrase><source hit='" (:t2 s) "'>" (x/loc-tostr (:source s)) "</source></result>"))
-       )))
+    (let
+        [link-agents (map #(agent %) target-filtered)]
+      (doseq
+          [ag link-agents]
+        (send ag (fn[target-line]
+                   (let [links
+                         (sim/find-similarities 
+                            (fn [p1 p2] 
+                              (ngram/ngram-similarity chunk-size
+                                                      ngram-count p1 p2))
+                            min-confidence
+                            target-line
+                            source-filtered)]
+                     (println "Result")
+                     (doseq
+                         [s links
+                          :when (not (empty? s))]
+                       (println (:t2 s))
+                       (send-off visualization-agent vis/visualize 
+                                 (x/xpointer-tostr (:phrase s))
+                                 (:source s) :cites)
+                       (send xml-agent xml (str "<result confidence='" (:confidence s) "'><phrase hit='" (:t1 s) "'>" (x/loc-tostr (:phrase s)) "</phrase><source hit='" (:t2 s) "'>" (x/loc-tostr (:source s)) "</source></result>"))))
+                     nil)))
+      (doall (map #(await %) link-agents)))
+      ;; (println "links")
+      ;; (doseq
+      ;;     [s links
+      ;;      :when (not (empty? s)) ;explicitly exclude those runs that returned nil
+      ;;      ]
+      ;;   (send-off visualization-agent vis/visualize 
+      ;;             (x/xpointer-tostr (:phrase s))
+      ;;             (:source s) :cites)
+      ;;   (send xml-agent xml (str "<result confidence='" (:confidence s) "'><phrase hit='" (:t1 s) "'>" (x/loc-tostr (:phrase s)) "</phrase><source hit='" (:t2 s) "'>" (x/loc-tostr (:source s)) "</source></result>"))
+      ;;  ))
     (send xml-agent xml "</results>")
     (send-off visualization-agent vis/finalize source-file)
-    (println "Preparing for shutdown")
+    (println "Preparing for shutdown" (new java.util.Date))
     (await visualization-agent)
     (await xml-agent)
     (shutdown-agents)))
