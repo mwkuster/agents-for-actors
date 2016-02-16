@@ -41,25 +41,34 @@
     
     (send xml-agent xml "<results>")
     (send xml-agent xml (x/parameters-tostr par/*parameters*))
-    (doall 
-     (for [s (flatten ;Caution: map alone would build a list of lists
-              (pmap 
-               #(sim/find-similarities 
-                 (fn [p1 p2] 
-                   (ngram/ngram-similarity chunk-size
-                                           ngram-count p1 p2))
-                 min-confidence
-                 %
-                 source-filtered)
-               target-filtered))
+    (let [link-futures
+          (doall
+           (flatten ;Caution: map alone would build a list of lists
+              (map 
+               #(future
+                  (sim/find-similarities 
+                   (fn [p1 p2] 
+                     (ngram/ngram-similarity chunk-size
+                                             ngram-count p1 p2))
+                   min-confidence
+                   %
+                   source-filtered))
+               target-filtered)))
+          links (map deref link-futures)]
+      (println "links")
+      (println links)
+      (doseq
+          [s links
            :when (not (empty? s)) ;explicitly exclude those runs that returned nil
            ]
-       (do
-         (send-off visualization-agent vis/visualize 
-               (x/xpointer-tostr (:phrase s))
-               (:source s) :cites)
-         (send xml-agent xml (str "<result confidence='" (:confidence s) "'><phrase hit='" (:t1 s) "'>" (x/loc-tostr (:phrase s)) "</phrase><source hit='" (:t2 s) "'>" (x/loc-tostr (:source s)) "</source></result>"))
-       )))
+        (println "Individual hit")
+        (println s)))
+       ;; (do
+       ;;   (send-off visualization-agent vis/visualize 
+       ;;         (x/xpointer-tostr (:phrase s))
+       ;;         (:source s) :cites)
+       ;;   (send xml-agent xml (str "<result confidence='" (:confidence s) "'><phrase hit='" (:t1 s) "'>" (x/loc-tostr (:phrase s)) "</phrase><source hit='" (:t2 s) "'>" (x/loc-tostr (:source s)) "</source></result>"))
+       ;; )))
     (send xml-agent xml "</results>")
     (send-off visualization-agent vis/finalize source-file)
     (println "Preparing for shutdown")

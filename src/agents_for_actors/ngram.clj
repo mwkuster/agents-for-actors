@@ -50,7 +50,7 @@ are compared"
     (if  (not-any? empty? [phrase1 phrase2 chunk-seq1 chunk-seq2])
       (let
           [weighted-links
-           (pmap
+           (map
             (fn [[t1 t2]]
               {:weight
                (dice-coefficient 
