@@ -1,6 +1,7 @@
 (ns agents-for-actors.ngram
   (:require [clojure.string :as cs]
-            [clojure.set :as set]))
+            [clojure.set :as set]
+            [clj-fuzzy.metrics :as metrics]))
 
 (def padding "_")
 
@@ -38,12 +39,9 @@ all having word-count elements (cf. tests)"
   ([token-seq word-count]
      (generate-chunk-sequences token-seq word-count false)))
 
-
-(defn ngram-similarity ^Double [^Integer chunk-size ^Integer ngram-count ^String phrase1 ^String phrase2]
-  "This specific definition of similarity builds on ngram and
-calculates the confidence for the similairty of two phrases, using
-ngram-count grams based on phrases chunk-size long. All permutations
-are compared"
+(defn similarity  ^Double [weight-fn ^Integer chunk-size ^Integer ngram-count ^String phrase1 ^String phrase2]
+  "The overall functionality implementing chunking and then calling a
+  weight function to actually determine the weight of two substrings"
   (let
       [chunk-seq1 (generate-chunk-sequences phrase1 chunk-size true)
        chunk-seq2 (generate-chunk-sequences phrase2 chunk-size true)]
@@ -51,15 +49,32 @@ are compared"
       (let
           [weighted-links
            (map
-            (fn [[t1 t2]]
-              {:weight
-               (dice-coefficient 
-                (ngrams ngram-count t1)
-                (ngrams ngram-count t2))
-               :t1 t1
-               :t2 t2 })
+            weight-fn 
             (for [chunk1 chunk-seq1 chunk2 chunk-seq2] [chunk1 chunk2])),
            max-weight (apply max (map :weight weighted-links))]
-        ; review this code
+
         (first (filter #(= max-weight (:weight %)) weighted-links)))
       {:weight 0.0})))
+
+(defn ngram-similarity ^Double [^Integer chunk-size ^Integer ngram-count ^String phrase1 ^String phrase2]
+  "This specific definition of similarity builds on ngram and
+calculates the confidence for the similarity of two phrases, using
+ngram-count grams based on phrases chunk-size long. All permutations
+are compared"
+  (similarity (fn [[t1 t2]]
+                {:weight
+                 (dice-coefficient 
+                  (ngrams ngram-count t1)
+                  (ngrams ngram-count t2))
+                 :t1 t1
+                 :t2 t2 }) chunk-size ngram-count phrase1 phrase2))
+
+  (defn dice-similarity ^Double [^Integer chunk-size ^Integer ngram-count ^String phrase1 ^String phrase2]
+    "Use an out-of-the box dice weight to compare individual chunks of text"
+    (similarity (fn [[t1 t2]]
+                  {:weight
+                   (metrics/dice
+                    (ngrams ngram-count t1)
+                    (ngrams ngram-count t2))
+                   :t1 t1
+                   :t2 t2 }) chunk-size ngram-count phrase1 phrase2))
