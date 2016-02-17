@@ -3,7 +3,7 @@
             [clojure.zip :as z]))
 
 (defn- part-after-phrase-loc [phrase-loc source-seq]
-  "If input and output files are identical, the phrase will be part of the source sequence. To avoid parsing the same lines twice, ignore all lines before the current phrase (optimization)"
+  "If input and output files are identical, the phrase will be part of the source sequence. To avoid parsing the same lines twice, ignore all lines before the current phrase (optimization). If the last line has been reached, return nil"
   (let
       [remainder (partition-by #(= % phrase-loc) source-seq)]
     (if (= (count remainder) 3)
