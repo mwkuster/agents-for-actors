@@ -69,7 +69,7 @@ are compared"
                  :t1 t1
                  :t2 t2 }) chunk-size ngram-count phrase1 phrase2))
 
-  (defn dice-similarity ^Double [^Integer chunk-size ^Integer ngram-count ^String phrase1 ^String phrase2]
+(defn dice-similarity ^Double [^Integer chunk-size ^Integer ngram-count ^String phrase1 ^String phrase2]
     "Use an out-of-the box dice weight to compare individual chunks of text"
     (similarity (fn [[t1 t2]]
                   {:weight
