@@ -87,7 +87,8 @@ Vagrant.configure(2) do |config|
    else
      git clone https://github.com/mwkuster/agents-for-actors.git
    fi
-
+   sudo chown ubuntu *
+   
    #https://hub.docker.com/_/neo4j/
    docker pull neo4j:latest
    docker run -d --publish=7474:7474 --publish=7687:7687   --volume=$HOME/neo4j/data:/data neo4j
