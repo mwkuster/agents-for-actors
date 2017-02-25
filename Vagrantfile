@@ -12,7 +12,9 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "base"
+  config.vm.box = "ubuntu/xenial64"
+  #config.vm.box_version = "v20170224.0.0"
+  config.vm.box_check_update = true
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -22,7 +24,8 @@ Vagrant.configure(2) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 7474, host: 7474
+  config.vm.network "forwarded_port", guest: 7687, host: 7687
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -48,7 +51,7 @@ Vagrant.configure(2) do |config|
   #   vb.gui = true
   #
   #   # Customize the amount of memory on the VM:
-    vb.memory = "1024"
+    vb.memory = "8096"
   end
   #
   # View the documentation for the provider you are using for more
@@ -64,8 +67,29 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   sudo apt-get update
-  #   sudo apt-get install -y apache2
-  # SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+   sudo apt-get update
+   sudo apt-get install -y ansible
+   sudo apt-get install -y docker.io
+   sudo apt-get install -y openjdk-8-jre-headless
+   sudo apt-get install wget
+   sudo apt-get install git
+
+   sudo usermod -aG docker ubuntu
+
+   sudo -u ubuntu bash
+   wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+   chmod 755 lein; mv lein /usr/local/bin
+
+   if [ -d "agents-for-actors" ]; then
+     cd agents-for-actors
+     git pull 
+   else
+     git clone https://github.com/mwkuster/agents-for-actors.git
+   fi
+
+   #https://hub.docker.com/_/neo4j/
+   docker pull neo4j:latest
+   docker run -d --publish=7474:7474 --publish=7687:7687   --volume=$HOME/neo4j/data:/data neo4j
+  SHELL
 end
