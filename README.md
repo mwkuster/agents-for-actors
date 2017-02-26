@@ -60,7 +60,7 @@ As a prerequisite you need to install vagrant (https://www.vagrantup.com/). For 
 ```
 vagrant up
 ```
-to provision and start Virtualbox (this can take a while and will typically download quite a bit of data).
+to provision and start Virtualbox --- this can take a while and can download quite a few GBs of data, so use a fast line and have a coffee ready...
 
 
 Inside the Virtualbox (vagrant ssh) you can start up a Docker instance with the latest version of neo4j and launch agents for actors directly:
