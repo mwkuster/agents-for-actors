@@ -89,7 +89,7 @@ Vagrant.configure(2) do |config|
      git clone https://github.com/mwkuster/agents-for-actors.git
    fi
 
-   if [! -d "neo4j" ]; then
+   if [ ! -d "neo4j" ]; then
      mkdir neo4j
    fi
 
