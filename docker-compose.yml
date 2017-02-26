@@ -8,3 +8,4 @@ neo4j:
   environment:
     NEO4J_CACHE_MEMORY: 1024M
     NEO4J_HEAP_MEMORY: 2024M
+    NEO4J_AUTH: none
