@@ -71,6 +71,7 @@ Vagrant.configure(2) do |config|
    sudo apt-get update
    sudo apt-get install -y ansible
    sudo apt-get install -y docker.io
+   sudo apt-get install -y docker-compose
    sudo apt-get install -y openjdk-8-jre-headless
    sudo apt-get install wget
    sudo apt-get install git
@@ -90,7 +91,7 @@ Vagrant.configure(2) do |config|
    sudo chown ubuntu *
    
    #https://hub.docker.com/_/neo4j/
-   docker pull neo4j:latest
-   docker run -d --publish=7474:7474 --publish=7687:7687   --volume=$HOME/neo4j/data:/data neo4j
+   #docker pull neo4j:latest
+   #docker run -d --publish=7474:7474 --publish=7687:7687   --volume=$HOME/neo4j/data:/data neo4j
   SHELL
 end
