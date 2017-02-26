@@ -52,6 +52,28 @@ Other visualization mechanisms (including none) can be added by adding specializ
 The current version of AfA has been updated to work with Neo4j version 2.3.2.
 
 
+##Vagrant and Docker
+In order to facilitate the deployment of agents for actors a Vagrant file loads all the necessary dependencies into a Virtualbox.
+
+As a prerequisite you need to install vagrant (https://www.vagrantup.com/). For recent distributions of GNU/Linux it is typically part of the package repository. Once installed use 
+
+```
+vagrant up
+```
+to provision and start Virtualbox (this can take a while and will typically download quite a bit of data).
+
+
+Inside the Virtualbox (vagrant ssh) you can start up a Docker instance with the latest version of neo4j and launch agents for actors directly:
+```
+vagrant ssh
+
+cd agents-for-actors
+docker-compose up -d neo4j 
+lein run [your configuration file]
+```
+
+The docker instance of Neo4j is configured to run without authentication - caveat emptor!
+
 ##License
 
 AfA is released under the GNU Lesser Public Licence (http://www.gnu.org/copyleft/lesser.html)
