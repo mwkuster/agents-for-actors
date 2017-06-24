@@ -55,7 +55,7 @@ The current version of AfA has been updated to work with Neo4j version 2.3.2.
 ## Vagrant and Docker
 In order to facilitate the deployment of agents for actors a Vagrant file loads all the necessary dependencies into a Virtualbox.
 
-As a prerequisite you need to install vagrant (https://www.vagrantup.com/). For recent distributions of GNU/Linux it is typically part of the package repository. Once installed use 
+As a prerequisite you need to install vagrant (https://www.vagrantup.com/) and Virtualbox. For recent distributions of GNU/Linux it is typically part of the package repository. Once installed use 
 
 ```
 vagrant up
