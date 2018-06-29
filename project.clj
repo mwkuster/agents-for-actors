@@ -4,12 +4,11 @@
   :license {:name "GNU Lesser Public License"
             :url "http://www.gnu.org/copyleft/lesser.html"
             :comments "Author: Marc Wilhelm Küster"}
-  :dependencies [[org.clojure/clojure "1.6.0"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/tools.logging "0.2.3"]
-                 [clojurewerkz/neocons "3.1.0"]
+                 [clojurewerkz/neocons "3.2.0"]
                  [clj-fuzzy "0.1.8"]
-                 [cheshire "5.5.0"]
-                 [incanter "1.3.0"]]
+                 [cheshire "5.8.0"]
+                 [incanter "1.9.3"]]
   :main agents-for-actors.core
   :jvm-opts ["-Xmx7g"])
-
